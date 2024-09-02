@@ -1,0 +1,36 @@
+rules:
+  - id: bad_nft
+    message: Detect NFT with URL $RLS
+    patterns:
+      - pattern-inside: |
+          public entry fun $FUNC(...) {
+            ...
+          }
+      - pattern: | 
+          let $V1 = $VTYPE{
+            ...,
+            $RL: 0x1::string::utf8(b"$RLS"),
+            ...
+          };
+          ...
+          0x2::transfer::public_transfer<$VTYPE>($V1, ...);
+      - focus-metavariable: $RLS
+      - metavariable-regex :
+          metavariable: $RLS
+          regex: "http[s]?://.*"
+        
+
+
+    metadata:
+      references:
+        - https://doc.rust-lang.org/std/keyword.unsafe.html
+      technology:
+        - move_on_sui
+      category: security
+      cwe: "test"
+      confidence: HIGH
+      likelihood: LOW
+      impact: LOW
+      subcategory: audit
+    languages: [move_on_sui]
+    severity: INFO

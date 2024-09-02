@@ -1,0 +1,31 @@
+rules:
+  - id: share_coin
+    message: Detected possible share coin
+    patterns:
+      - pattern-inside: |
+          fun init(...) {
+            ...
+          }
+      - pattern: | 
+          let ($V0, $V1) = 0x2::coin::create_currency<$VTYPE>($ARG0, $ARG1, b"$SYM", b"$NAME", b"$DESC", $URL, $TX);
+          ...
+          let $V2 = $STRUCT{
+            ...,
+            $CAP: $V0,
+          
+          };
+          ...
+          0x2::transfer::share_object<$STRUCT>($V2);
+    metadata:
+      references:
+        - https://doc.rust-lang.org/std/keyword.unsafe.html
+      technology:
+        - move_on_sui
+      category: security
+      cwe: "test"
+      confidence: HIGH
+      likelihood: LOW
+      impact: LOW
+      subcategory: audit
+    languages: [move_on_sui]
+    severity: INFO

@@ -1,0 +1,17 @@
+rules:
+  - id: meta_fun_test
+    message: Detected 'unsafe' usage, please audit for secure usage
+    pattern: foo($...ARGS, 3, $...ARGS)
+    metadata:
+      references:
+        - https://doc.rust-lang.org/std/keyword.unsafe.html
+      technology:
+        - move_on_sui
+      category: security
+      cwe: "test"
+      confidence: HIGH
+      likelihood: LOW
+      impact: LOW
+      subcategory: audit
+    languages: [move_on_sui]
+    severity: INFO
